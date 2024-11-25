@@ -1,3 +1,4 @@
+//@ts-self-types = "../type/record.d.ts"
 import { Struct, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 
