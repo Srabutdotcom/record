@@ -2,7 +2,7 @@
 import { Struct, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 
-export class TLSPlaintext extends Struct {
+export class TLSPlaintext extends Uint8Array {
    static from(array){
       let offset = 0;
       const copy = Uint8Array.from(array);
@@ -12,15 +12,19 @@ export class TLSPlaintext extends Struct {
       const fragment = copy.subarray(offset, offset+lengthOf)
       return new TLSPlaintext(type, version, fragment)
    }
+   static createFrom(type, version, fragment){ return new TLSPlaintext(type, version, fragment)}
    constructor(type, version, fragment){
-      super(
+      const struct = new Struct(
          type.Uint8,
          version.protocolVersion(),
          Uint16.fromValue(fragment.length),
          fragment
       )
+      super(struct)
+
       this.type = type;
       this.version = version;
       this.fragment = fragment
+      this.struct = struct
    }
 }
