@@ -25,6 +25,6 @@ export class TLSPlaintext extends Uint8Array {
       this.type = type;
       this.version = version;
       this.fragment = fragment
-      this.struct = struct
+      this.items = struct.items
    }
 }

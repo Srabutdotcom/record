@@ -1,4 +1,4 @@
-import { Struct, Version, ContentType } from "../src/dep.ts";
+import { ContentType, Struct, Version } from "../src/dep.ts";
 
 /**
  * Represents a TLS plaintext record as a specialized `Uint8Array`.
@@ -20,7 +20,11 @@ export class TLSPlaintext extends Uint8Array {
    * @param {Uint8Array} fragment - The fragment data.
    * @returns {TLSPlaintext} A new `TLSPlaintext` instance.
    */
-  static createFrom(type: ContentType, version: Version, fragment: Uint8Array): TLSPlaintext;
+  static createFrom(
+    type: ContentType,
+    version: Version,
+    fragment: Uint8Array,
+  ): TLSPlaintext;
 
   /**
    * Constructs a new `TLSPlaintext` instance.
@@ -51,7 +55,7 @@ export class TLSPlaintext extends Uint8Array {
 
   /**
    * The underlying `Struct` instance representing the TLS plaintext record.
-   * @type {Struct}
+   * @type {[Uint8Array,Uint8Array,Uint8Array]}
    */
-  readonly struct: Struct;
+  readonly items: [Uint8Array, Uint8Array, Uint8Array];
 }
