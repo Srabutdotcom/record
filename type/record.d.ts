@@ -1,4 +1,4 @@
-import { ContentType, Struct, Version } from "../src/dep.ts";
+import { ContentType, Version } from "@tls/enum";
 
 /**
  * Represents a TLS plaintext record as a specialized `Uint8Array`.

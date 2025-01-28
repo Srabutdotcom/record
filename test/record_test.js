@@ -31,4 +31,3 @@ const clientHelloMsg = HexaDecimal.fromString(`16 03 01 00 c4 01 00 00 c0 03 03 
 
 const clientHelloBack = TLSPlaintext.from(clientHelloMsg.byte);
 
-debugger;
