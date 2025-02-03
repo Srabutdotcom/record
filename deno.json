@@ -1,6 +1,6 @@
 {
   "name": "@tls/record",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "exports": "./src/mod.ts",
   "publish": {
     "exclude": ["dist/"]

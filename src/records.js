@@ -8,7 +8,7 @@ export function parseRecords(array) {
 
 export function parseServerHello(array, clientHello, clientPrivateKey) {
    const [serverHelloRecord, _changeCipherSpec, applicationData] = parseRecords(array);
-   const fullHS = new FullHandshake(clientHello, serverHelloRecord.fragment.message, clientPrivateKey, HandshakeRole.CLIENT);
+   const fullHS = new FullHandshake(clientHello, serverHelloRecord.fragment, clientPrivateKey, HandshakeRole.CLIENT);
    const decrypted = fullHS.aead_hs_s.open(applicationData.tlsCipherText)
 
    return parseItems(decrypted.content, 0, decrypted.content.length, Handshake)
