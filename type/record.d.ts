@@ -1,23 +1,26 @@
 import { ContentType, Version } from "@tls/enum";
+import { TLSInnerPlaintext } from "../src/innerplaintext.js";
+import { TLSCiphertext } from "../src/ciphertext.js";
 
 /**
- * Represents a TLS plaintext record as a specialized `Uint8Array`.
+ * Represents a TLS 1.3 plaintext record at the record layer.
+ * This class handles the parsing and construction of TLSPlaintext structures.
  */
 export class TLSPlaintext extends Uint8Array {
   /**
-   * Parses a given array into a `TLSPlaintext` instance.
+   * Parses a `TLSPlaintext` message from a raw byte array.
    *
-   * @param {Uint8Array} array - The input byte array.
-   * @returns {TLSPlaintext} A new `TLSPlaintext` instance created from the array.
+   * @param {Uint8Array} array - The raw TLS record-layer message.
+   * @returns {TLSPlaintext} A parsed `TLSPlaintext` instance.
    */
   static from(array: Uint8Array): TLSPlaintext;
 
   /**
-   * Creates a `TLSPlaintext` instance from specific type, version, and fragment.
+   * Creates a `TLSPlaintext` instance from type, version, and fragment data.
    *
-   * @param {ContentType} type - The content type of the plaintext.
-   * @param {Version} version - The protocol version.
-   * @param {Uint8Array} fragment - The fragment data.
+   * @param {ContentType} type - The content type of the TLS message.
+   * @param {Version} version - The TLS protocol version.
+   * @param {Uint8Array} fragment - The message fragment.
    * @returns {TLSPlaintext} A new `TLSPlaintext` instance.
    */
   static createFrom(
@@ -29,33 +32,43 @@ export class TLSPlaintext extends Uint8Array {
   /**
    * Constructs a new `TLSPlaintext` instance.
    *
-   * @param {ContentType} type - The content type.
-   * @param {Version} version - The protocol version.
-   * @param {Uint8Array} fragment - The fragment data.
+   * @param {ContentType} type - The content type of the TLS message.
+   * @param {Version} version - The TLS protocol version (default: `Version.legacy`).
+   * @param {Uint8Array} fragment - The message fragment.
    */
   constructor(type: ContentType, version: Version, fragment: Uint8Array);
 
-  /**
-   * The content type of the TLS plaintext record.
-   * @type {ContentType}
-   */
-  readonly type: ContentType;
+  /** The content type of the TLS record. */
+  type: ContentType;
+
+  /** The TLS protocol version. */
+  version: Version;
+
+  /** The raw fragment of the TLS message. */
+  fragment: Uint8Array;
+
+  /** Internal structure items. */
+  items: any[];
 
   /**
-   * The protocol version of the TLS plaintext record.
-   * @type {Version}
+   * Converts the `TLSPlaintext` instance into a `TLSCiphertext` instance.
+   * This method handles encryption at the record layer.
+   *
+   * @returns {TLSCiphertext} The encrypted TLSCiphertext.
    */
-  readonly version: Version;
+  get tlsCipherText(): TLSCiphertext;
 
   /**
-   * The fragment data of the TLS plaintext record.
-   * @type {Uint8Array}
+   * Creates a `TLSInnerPlaintext` instance from this `TLSPlaintext`.
+   *
+   * @param {number} numZeros - Number of padding bytes to include.
+   * @returns {TLSInnerPlaintext} A TLSInnerPlaintext instance.
    */
-  readonly fragment: Uint8Array;
+  tlsInnerPlainText(numZeros: number): TLSInnerPlaintext;
 
   /**
-   * The underlying `Struct` instance representing the TLS plaintext record.
-   * @type {[Uint8Array,Uint8Array,Uint8Array]}
+   * Parses the `fragment` field to extract specific TLS message types.
+   * This function modifies `fragment` when it contains a `Handshake` message.
    */
-  readonly items: [Uint8Array, Uint8Array, Uint8Array];
+  parse(): void;
 }

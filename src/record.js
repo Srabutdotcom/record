@@ -1,7 +1,8 @@
 //@ts-self-types = "../type/record.d.ts"
-import { Struct, Uint16 } from "./dep.ts";
+import { Handshake, Struct, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 import { TLSCiphertext } from "./ciphertext.js"
+import { TLSInnerPlaintext } from "./innerplaintext.js";
 
 export class TLSPlaintext extends Uint8Array {
    static from(array) {
@@ -27,9 +28,23 @@ export class TLSPlaintext extends Uint8Array {
       this.version = version;
       this.fragment = fragment
       this.items = struct.items
+      this.parse();
    }
 
    get tlsCipherText(){
       return TLSCiphertext.from(this);
+   }
+
+   tlsInnerPlainText(numZeros){
+      return new TLSInnerPlaintext(this, this.type, numZeros);
+   }
+
+   parse(){
+      switch (this.type) {
+         case ContentType.HANDSHAKE: {
+            this.fragment = Handshake.from(this.fragment);
+            break;
+         }
+      }
    }
 }
