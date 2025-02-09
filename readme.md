@@ -7,11 +7,11 @@ This project implements a representation of TLS plaintext records, including par
 ### Completed Work
 
 - [x] TLSPlaintext records
+- [x] TLSInnerPlaintext
+- [x] TLSCiphertext
 
 ### Pending Work
 
-- [ ] TLSInnerPlaintext
-- [ ] TLSCiphertext
 - [ ] ...
 
 ## Example

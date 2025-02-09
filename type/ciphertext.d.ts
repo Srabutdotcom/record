@@ -1,30 +1,32 @@
 /**
  * Represents a TLSCiphertext structure in a TLS handshake.
- * Data format to be supplied for encryption process.
+ * This structure contains the encrypted data along with its header.
+ * It is used in the encryption process within TLS 1.3.
  */
 export declare class TLSCiphertext extends Uint8Array {
   /**
-   * Constructs a new `TLSCiphertext` instance from an existing array.
-   *
-   * @param array - The array containing the ciphertext data.
-   * @returns A new instance of `TLSCiphertext`.
+   * Creates an instance of TLSCiphertext from the given arguments.
+   * @param {...any[]} args - Arguments used to create the instance.
+   * @returns {TLSCiphertext} A new instance of TLSCiphertext.
    */
-  static from(array: Uint8Array | number[]): TLSCiphertext;
+  static from(...args: any[]): TLSCiphertext;
 
   /**
-   * Constructs a `TLSCiphertext` instance.
-   *
-   * @param encrypted_record - The encrypted record data.
+   * Constructs a TLSCiphertext instance.
+   * If the first argument is a Uint8Array, it applies `sanitize` before initializing.
+   * @param {...any[]} args - Arguments to initialize the Uint8Array.
    */
-  constructor(encrypted_record: Uint8Array);
+  constructor(...args: any[]);
 
   /**
-   * The header portion of the TLSCiphertext.
+   * Retrieves the header (first 5 bytes) of the TLSCiphertext.
+   * @returns {Uint8Array} The header bytes.
    */
-  header: Uint8Array;
+  get header(): Uint8Array;
 
   /**
-   * The encrypted record data within the TLSCiphertext.
+   * Retrieves the encrypted record.
+   * @returns {Uint8Array} The encrypted part of the TLSCiphertext.
    */
-  encrypted_record: Uint8Array;
+  get encrypted_record(): Uint8Array;
 }

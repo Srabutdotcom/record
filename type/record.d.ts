@@ -1,74 +1,59 @@
-import { ContentType, Version } from "@tls/enum";
-import { TLSInnerPlaintext } from "../src/innerplaintext.js";
-import { TLSCiphertext } from "../src/ciphertext.js";
+import { ContentType, Handshake, Version } from "../src/dep.ts";
 
 /**
- * Represents a TLS 1.3 plaintext record at the record layer.
- * This class handles the parsing and construction of TLSPlaintext structures.
+ * Represents a TLSPlaintext structure, extending Uint8Array.
+ * This class is used to parse and handle TLS 1.3 plaintext records.
  */
-export class TLSPlaintext extends Uint8Array {
-  /**
-   * Parses a `TLSPlaintext` message from a raw byte array.
-   *
-   * @param {Uint8Array} array - The raw TLS record-layer message.
-   * @returns {TLSPlaintext} A parsed `TLSPlaintext` instance.
-   */
-  static from(array: Uint8Array): TLSPlaintext;
+export declare class TLSPlaintext extends Uint8Array {
+  #type: ContentType | undefined;
+  #version: Version | undefined;
+  #lengthOf:number | undefined;
+  #fragment: Uint8Array | Handshake | undefined;
 
   /**
-   * Creates a `TLSPlaintext` instance from type, version, and fragment data.
-   *
-   * @param {ContentType} type - The content type of the TLS message.
-   * @param {Version} version - The TLS protocol version.
-   * @param {Uint8Array} fragment - The message fragment.
-   * @returns {TLSPlaintext} A new `TLSPlaintext` instance.
+   * Creates an instance of TLSPlaintext from the given arguments.
+   * @param {...any[]} args - Arguments to pass to the constructor.
+   * @returns {TLSPlaintext} A new instance of TLSPlaintext.
    */
-  static createFrom(
-    type: ContentType,
-    version: Version,
-    fragment: Uint8Array,
-  ): TLSPlaintext;
+  static from(...args: any[]): TLSPlaintext;
 
   /**
-   * Constructs a new `TLSPlaintext` instance.
-   *
-   * @param {ContentType} type - The content type of the TLS message.
-   * @param {Version} version - The TLS protocol version (default: `Version.legacy`).
-   * @param {Uint8Array} fragment - The message fragment.
+   * Alias for the `from` method.
+   * @param {...any[]} args - Arguments to pass to the constructor.
+   * @returns {TLSPlaintext} A new instance of TLSPlaintext.
    */
-  constructor(type: ContentType, version: Version, fragment: Uint8Array);
-
-  /** The content type of the TLS record. */
-  type: ContentType;
-
-  /** The TLS protocol version. */
-  version: Version;
-
-  /** The raw fragment of the TLS message. */
-  fragment: Uint8Array;
-
-  /** Internal structure items. */
-  items: any[];
+  static create: (...args: any[]) => TLSPlaintext;
 
   /**
-   * Converts the `TLSPlaintext` instance into a `TLSCiphertext` instance.
-   * This method handles encryption at the record layer.
-   *
-   * @returns {TLSCiphertext} The encrypted TLSCiphertext.
+   * Constructs a TLSPlaintext instance.
+   * If the first argument is a Uint8Array, it applies `sanitize`.
+   * @param {...any[]} args - Arguments to initialize the Uint8Array.
    */
-  get tlsCipherText(): TLSCiphertext;
+  constructor(...args: any[]);
 
   /**
-   * Creates a `TLSInnerPlaintext` instance from this `TLSPlaintext`.
-   *
-   * @param {number} numZeros - Number of padding bytes to include.
-   * @returns {TLSInnerPlaintext} A TLSInnerPlaintext instance.
+   * Gets the content type of the TLS record.
+   * @returns {ContentType} The TLS content type.
    */
-  tlsInnerPlainText(numZeros: number): TLSInnerPlaintext;
+  get type(): ContentType;
 
   /**
-   * Parses the `fragment` field to extract specific TLS message types.
-   * This function modifies `fragment` when it contains a `Handshake` message.
+   * Gets the version of the TLS record.
+   * @returns {Version} The TLS version.
    */
-  parse(): void;
+  get version(): Version;
+
+  /**
+   * Gets the length of the TLS record fragment.
+   * @returns {number} The length of the fragment.
+   */
+  get lengthOf(): number;
+
+  /**
+   * Gets the fragment data of the TLS record.
+   * If the type is HANDSHAKE, it returns a `Handshake` instance.
+   * Otherwise, it returns a `Uint8Array` containing the fragment data.
+   * @returns {Uint8Array | Handshake} The TLS fragment.
+   */
+  get fragment(): Uint8Array | Handshake;
 }
