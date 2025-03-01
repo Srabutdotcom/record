@@ -1,5 +1,5 @@
 //@ts-self-types = "../type/record.d.ts"
-import { Handshake, Uint16 } from "./dep.ts";
+import { Handshake, safeuint8array, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 
 /* export class TLSPlaintext extends Uint8Array {
@@ -52,6 +52,21 @@ export class TLSPlaintext extends Uint8Array {
    #version
    #lengthOf
    #fragment
+   static fromAlert(alertMsg){
+      return build(ContentType.ALERT, alertMsg)
+   }
+   static fromApplicationData(applicationData){
+      return build(ContentType.APPLICATION_DATA, applicationData)
+   }
+   static fromChangeCipherSpec(msg){
+      return build(ContentType.CHANGE_CIPHER_SPEC, msg)
+   }
+   static fromHandshake(msg){
+      return build(ContentType.Handshake, msg)
+   }
+   static fromInvalid(msg){
+      return build(ContentType.INVALID, msg)
+   }
    static from(...args) { return new TLSPlaintext(...args) }
    static create = TLSPlaintext.from
    constructor(...args) {
@@ -95,4 +110,15 @@ function sanitize(...args) {
    } catch (error) {
       throw error
    }
+}
+
+function build(type, msg){
+   return TLSPlaintext.from(
+      safeuint8array(
+         type.byte,
+         Version.legacy.byte,
+         Uint16.fromValue(msg.length),
+         msg
+      )
+   )
 }

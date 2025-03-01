@@ -15,7 +15,7 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.11",
     "@tls/crypto": "jsr:@tls/crypto@^0.3.4",
-    "@tls/enum": "jsr:@tls/enum@^0.8.0",
+    "@tls/enum": "jsr:@tls/enum@^0.8.1",
     "@tls/handshake": "jsr:@tls/handshake@^0.1.2",
     "@tls/struct": "jsr:@tls/struct@^0.3.8"
   }

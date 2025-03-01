@@ -10,6 +10,11 @@ export declare class TLSPlaintext extends Uint8Array {
   #lengthOf:number | undefined;
   #fragment: Uint8Array | Handshake | undefined;
 
+  static fromAlert(msg:Uint8Array): TLSPlaintext;
+  static fromApplicationData(msg:Uint8Array): TLSPlaintext;
+  static fromChangeCipherSpec(msg:Uint8Array): TLSPlaintext;
+  static fromHandshake(msg:Uint8Array): TLSPlaintext;
+  static fromInvalid(msg:Uint8Array): TLSPlaintext;
   /**
    * Creates an instance of TLSPlaintext from the given arguments.
    * @param {...any[]} args - Arguments to pass to the constructor.
