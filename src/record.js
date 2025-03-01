@@ -62,7 +62,7 @@ export class TLSPlaintext extends Uint8Array {
       return build(ContentType.CHANGE_CIPHER_SPEC, msg)
    }
    static fromHandshake(msg){
-      return build(ContentType.Handshake, msg)
+      return build(ContentType.HANDSHAKE, msg)
    }
    static fromInvalid(msg){
       return build(ContentType.INVALID, msg)
