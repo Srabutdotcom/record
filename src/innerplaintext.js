@@ -53,7 +53,7 @@ export class TLSInnerPlaintext extends Uint8Array {
    #numZeros
    static fromContentTypeNumZeros(content, type, numZeros){
       type = (type instanceof ContentType)? type.byte: (typeof type == "number")? Uint8Array.of(type): Uint8Array.of(22) 
-      const array = safeuint8array(content, type.byte, new Uint8Array(numZeros));
+      const array = safeuint8array(content, type, new Uint8Array(numZeros));
       return TLSInnerPlaintext.from(array)
    }
    static from(...args){ return new TLSInnerPlaintext(...args)}
