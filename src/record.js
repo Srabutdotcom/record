@@ -1,5 +1,5 @@
 //@ts-self-types = "../type/record.d.ts"
-import { Handshake, safeuint8array, Uint16 } from "./dep.ts";
+import { Alert, Handshake, safeuint8array, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 
 /* export class TLSPlaintext extends Uint8Array {
@@ -87,13 +87,18 @@ export class TLSPlaintext extends Uint8Array {
    }
    get fragment() {
       if (this.#fragment) return this.#fragment
+      const content = this.subarray(5, 5 + this.lengthOf);
       switch (this.type) {
          case ContentType.HANDSHAKE: {
-            this.#fragment ||= Handshake.from(this.subarray(5, 5 + this.lengthOf))
+            this.#fragment ||= Handshake.from(content)
+            break;
+         }
+         case ContentType.ALERT: {
+            this.#fragment ||= Alert.from(content)
             break;
          }
          default:
-            this.#fragment ||= this.subarray(5, 5 + this.lengthOf)
+            this.#fragment ||= content
             break;
       }
       return this.#fragment;
