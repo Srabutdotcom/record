@@ -52,19 +52,20 @@ export class TLSPlaintext extends Uint8Array {
    #version
    #lengthOf
    #fragment
-   static fromAlert(alertMsg){
+   #groups
+   static fromAlert(alertMsg) {
       return build(ContentType.ALERT, alertMsg)
    }
-   static fromApplicationData(applicationData){
+   static fromApplicationData(applicationData) {
       return build(ContentType.APPLICATION_DATA, applicationData)
    }
-   static fromChangeCipherSpec(msg){
+   static fromChangeCipherSpec(msg) {
       return build(ContentType.CHANGE_CIPHER_SPEC, msg)
    }
-   static fromHandshake(msg){
+   static fromHandshake(msg) {
       return build(ContentType.HANDSHAKE, msg)
    }
-   static fromInvalid(msg){
+   static fromInvalid(msg) {
       return build(ContentType.INVALID, msg)
    }
    static from(...args) { return new TLSPlaintext(...args) }
@@ -103,6 +104,8 @@ export class TLSPlaintext extends Uint8Array {
       }
       return this.#fragment;
    }
+   set groups(groups) { this.#groups = groups }
+   get groups(){ return this.#groups }
 }
 
 function sanitize(...args) {
@@ -117,7 +120,7 @@ function sanitize(...args) {
    }
 }
 
-function build(type, msg){
+function build(type, msg) {
    return TLSPlaintext.from(
       safeuint8array(
          type.byte,

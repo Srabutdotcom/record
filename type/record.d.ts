@@ -1,4 +1,4 @@
-import { ContentType, Handshake, Version } from "../src/dep.ts";
+import { ContentType, Handshake, NamedGroup, Version } from "../src/dep.ts";
 
 /**
  * Represents a TLSPlaintext structure, extending Uint8Array.
@@ -7,14 +7,14 @@ import { ContentType, Handshake, Version } from "../src/dep.ts";
 export declare class TLSPlaintext extends Uint8Array {
   #type: ContentType | undefined;
   #version: Version | undefined;
-  #lengthOf:number | undefined;
+  #lengthOf: number | undefined;
   #fragment: Uint8Array | Handshake | undefined;
 
-  static fromAlert(msg:Uint8Array): TLSPlaintext;
-  static fromApplicationData(msg:Uint8Array): TLSPlaintext;
-  static fromChangeCipherSpec(msg:Uint8Array): TLSPlaintext;
-  static fromHandshake(msg:Uint8Array): TLSPlaintext;
-  static fromInvalid(msg:Uint8Array): TLSPlaintext;
+  static fromAlert(msg: Uint8Array): TLSPlaintext;
+  static fromApplicationData(msg: Uint8Array): TLSPlaintext;
+  static fromChangeCipherSpec(msg: Uint8Array): TLSPlaintext;
+  static fromHandshake(msg: Uint8Array): TLSPlaintext;
+  static fromInvalid(msg: Uint8Array): TLSPlaintext;
   /**
    * Creates an instance of TLSPlaintext from the given arguments.
    * @param {...any[]} args - Arguments to pass to the constructor.
@@ -61,4 +61,6 @@ export declare class TLSPlaintext extends Uint8Array {
    * @returns {Uint8Array | Handshake} The TLS fragment.
    */
   get fragment(): Uint8Array | Handshake;
+  set groups(groups: Map<NamedGroup, NamedGroup>);
+  get groups(): Map<NamedGroup, NamedGroup>;
 }
