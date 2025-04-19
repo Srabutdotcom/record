@@ -2,6 +2,8 @@
  * Represents a TLSCiphertext structure in a TLS handshake.
  * This structure contains the encrypted data along with its header.
  * It is used in the encryption process within TLS 1.3.
+ * @see {@link https://jsr.io/@tls/record jsr.io@tls/record}
+ * @version 0.2.6
  */
 export declare class TLSCiphertext extends Uint8Array {
   /**

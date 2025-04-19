@@ -1,52 +1,17 @@
 //@ts-self-types = "../type/record.d.ts"
-import { Alert, Handshake, safeuint8array, Uint16 } from "./dep.ts";
+import { Alert, Handshake, unity, Uint16 } from "./dep.ts";
 import { Version, ContentType } from "./dep.ts"
 
-/* export class TLSPlaintext extends Uint8Array {
-   static from(array) {
-      let offset = 0;
-      const copy = Uint8Array.from(array);
-      const type = ContentType.from(copy); offset += 1;
-      const version = Version.from(copy.subarray(offset)); offset += 2;
-      const lengthOf = Uint16.from(copy.subarray(offset)).value; offset += 2;
-      const fragment = copy.subarray(offset, offset + lengthOf)
-      return new TLSPlaintext(type, version, fragment)
-   }
-   static createFrom(type, version, fragment) { return new TLSPlaintext(type, version, fragment) }
-   constructor(type, version = Version.legacy, fragment) {
-      const struct = new Struct(
-         type.Uint8,
-         version.protocolVersion(),
-         Uint16.fromValue(fragment.length),
-         fragment
-      )
-      super(struct)
-
-      this.type = type;
-      this.version = version;
-      this.fragment = fragment
-      this.items = struct.items
-      //this.parse();
-   }
-
-   get tlsCipherText() {
-      return TLSCiphertext.from(this);
-   }
-
-   tlsInnerPlainText(numZeros) {
-      return new TLSInnerPlaintext(this, this.type, numZeros);
-   }
-
-   parse() {
-      switch (this.type) {
-         case ContentType.HANDSHAKE: {
-            this.fragment = Handshake.from(this.fragment);
-            break;
-         }
-      }
-   }
-} */
-
+/**
+ * ```
+ * struct {
+      ContentType type;
+      ProtocolVersion legacy_record_version;
+      uint16 length;
+      opaque fragment[TLSPlaintext.length];
+   } TLSPlaintext;
+   ```
+ */
 export class TLSPlaintext extends Uint8Array {
    #type
    #version
@@ -71,7 +36,8 @@ export class TLSPlaintext extends Uint8Array {
    static from(...args) { return new TLSPlaintext(...args) }
    static create = TLSPlaintext.from
    constructor(...args) {
-      args = (args[0] instanceof Uint8Array) ? sanitize(...args) : args
+      sanitize(args)
+      //args = (args[0] instanceof Uint8Array) ? sanitize(...args) : args
       super(...args)
    }
    get type() {
@@ -108,13 +74,14 @@ export class TLSPlaintext extends Uint8Array {
    get groups(){ return this.#groups }
 }
 
-function sanitize(...args) {
+function sanitize(args) {
    const array = args[0];
+   if(!(array instanceof Uint8Array))return;
    try {
       const _isContentType = ContentType.from(array) instanceof ContentType;
       const lengthOf = Uint16.from(array.subarray(3, 5)).value;
-      const slicedArray = array.slice(0, 5 + lengthOf);
-      return [slicedArray]
+      args[0] = array.subarray(0, 5 + lengthOf)
+      return
    } catch (error) {
       throw error
    }
@@ -122,7 +89,7 @@ function sanitize(...args) {
 
 function build(type, msg) {
    return TLSPlaintext.from(
-      safeuint8array(
+      unity(
          type.byte,
          Version.legacy.byte,
          Uint16.fromValue(msg.length),

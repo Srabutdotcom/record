@@ -1,37 +1,14 @@
 //@ts-self-types="../type/innerplaintext.d.ts"
-import { ContentType, safeuint8array } from "./dep.ts";
+import { ContentType, unity } from "./dep.ts";
 
 /**
- * Is the input for encryption process in TLS 1.3
- */
-/* export class TLSInnerPlaintext extends Uint8Array {
-   content;
-   type;
-   numZeros;
-   static from(array) {
-      const copy = Uint8Array.from(array);
-      const lastNonZeroIndex = copy.reduceRight((li, v, i) => (li === -1 && v !== 0 ? i : li), -1);
-      const content = copy.slice(0, lastNonZeroIndex);
-      const type = ContentType.fromValue(copy[lastNonZeroIndex]);
-      const numZeros = copy.length - 1 - lastNonZeroIndex;
-      return new TLSInnerPlaintext(content, type, numZeros)
-   }
-   constructor(content, type, numZeros = 0) {
-      const struct = new Uint8Array(content.length + 1 + numZeros);
-      struct.set(content, 0);
-      struct[content.length] = +type;
-      super(struct);
-      this.content = content;
-      this.type = type;
-      this.numZeros = numZeros
-   }
-   header(keyLength) {
-      const lengthOf = this.length + keyLength;
-      return Uint8Array.of(+this.type, 3, 3, Math.trunc(lengthOf / 256), lengthOf % 256)
-   }
-} */
-
-/**
+ * ```
+ * struct {
+      opaque content[TLSPlaintext.length];
+      ContentType type;
+      uint8 zeros[length_of_padding];
+   } TLSInnerPlaintext;
+   ```
  * Is the input for encryption process in TLS 1.3
  * AEAD functions provide a unified encryption
    and authentication operation which turns plaintext into authenticated
@@ -53,7 +30,7 @@ export class TLSInnerPlaintext extends Uint8Array {
    #numZeros
    static fromContentTypeNumZeros(content, type, numZeros){
       type = (type instanceof ContentType)? type.byte: (typeof type == "number")? Uint8Array.of(type): Uint8Array.of(22) 
-      const array = safeuint8array(content, type, new Uint8Array(numZeros));
+      const array = unity(content, type, new Uint8Array(numZeros));
       return TLSInnerPlaintext.from(array)
    }
    static from(...args){ return new TLSInnerPlaintext(...args)}

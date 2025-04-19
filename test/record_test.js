@@ -1,9 +1,9 @@
-import { HexaDecimal } from "../src/dep.ts";
+import { Byte } from "../src/dep.ts";
 import { TLSPlaintext } from "../src/record.js";
 import { assertEquals } from "@std/assert"
 
 Deno.test("TLSPlainText", ()=>{
-   const clientHelloMsg = HexaDecimal.fromString(`16 03 01 00 c4 01 00 00 c0 03 03 cb 34 ec b1 e7 81 63
+   const clientHelloMsg = Byte.fromHex(`16 03 01 00 c4 01 00 00 c0 03 03 cb 34 ec b1 e7 81 63
       ba 1c 38 c6 da cb 19 6a 6d ff a2 1a 8d 99 12 ec 18 a2 ef 62 83
       02 4d ec e7 00 00 06 13 01 13 03 13 02 01 00 00 91 00 00 00 0b
       00 09 00 00 06 73 65 72 76 65 72 ff 01 00 01 00 00 0a 00 14 00
@@ -14,11 +14,11 @@ Deno.test("TLSPlainText", ()=>{
       02 03 08 04 08 05 08 06 04 01 05 01 06 01 02 01 04 02 05 02 06
       02 02 02 00 2d 00 02 01 01 00 1c 00 02 40 01`)
    
-   const clientHelloBack = TLSPlaintext.from(clientHelloMsg.byte);
-   assertEquals(clientHelloMsg.byte.toString(), clientHelloBack.toString())
+   const clientHelloBack = TLSPlaintext.from(clientHelloMsg);
+   assertEquals(clientHelloMsg.toString(), clientHelloBack.toString())
 })
 
-const clientHelloMsg = HexaDecimal.fromString(`16 03 01 00 c4 01 00 00 c0 03 03 cb 34 ec b1 e7 81 63
+const clientHelloMsg = Byte.fromHex(`16 03 01 00 c4 01 00 00 c0 03 03 cb 34 ec b1 e7 81 63
    ba 1c 38 c6 da cb 19 6a 6d ff a2 1a 8d 99 12 ec 18 a2 ef 62 83
    02 4d ec e7 00 00 06 13 01 13 03 13 02 01 00 00 91 00 00 00 0b
    00 09 00 00 06 73 65 72 76 65 72 ff 01 00 01 00 00 0a 00 14 00
@@ -29,6 +29,6 @@ const clientHelloMsg = HexaDecimal.fromString(`16 03 01 00 c4 01 00 00 c0 03 03 
    02 03 08 04 08 05 08 06 04 01 05 01 06 01 02 01 04 02 05 02 06
    02 02 02 00 2d 00 02 01 01 00 1c 00 02 40 01`)
 
-const clientHelloBack = TLSPlaintext.from(clientHelloMsg.byte);
+const clientHelloBack = TLSPlaintext.from(clientHelloMsg);
 const tlsCipherText = clientHelloBack.tlsCipherText;
 const fragment = clientHelloBack.fragment;
