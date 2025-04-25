@@ -9,7 +9,7 @@ import { ContentType } from "../src/dep.ts";
  * 
  * @see {@link https://www.rfc-editor.org/rfc/rfc8446#section-5.2 RFC 8446 Section 5.2}
  * @see {@link https://jsr.io/@tls/record jsr.io@tls/record}
- * @version 0.2.6
+ * @version 0.2.7
  */
 export declare class TLSInnerPlaintext extends Uint8Array {
   /**

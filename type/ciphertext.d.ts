@@ -3,7 +3,7 @@
  * This structure contains the encrypted data along with its header.
  * It is used in the encryption process within TLS 1.3.
  * @see {@link https://jsr.io/@tls/record jsr.io@tls/record}
- * @version 0.2.6
+ * @version 0.2.7
  */
 export declare class TLSCiphertext extends Uint8Array {
   /**

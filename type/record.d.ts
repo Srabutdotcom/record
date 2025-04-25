@@ -4,7 +4,7 @@ import { ContentType, Handshake, NamedGroup, Version } from "../src/dep.ts";
  * Represents a TLSPlaintext structure, extending Uint8Array.
  * This class is used to parse and handle TLS 1.3 plaintext records.
  * @see {@link https://jsr.io/@tls/record jsr.io@tls/record}
- * @version 0.2.6
+ * @version 0.2.7
  */
 export declare class TLSPlaintext extends Uint8Array {
   #type: ContentType | undefined;
